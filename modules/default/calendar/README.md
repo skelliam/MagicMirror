@@ -168,6 +168,20 @@ The following properties can be configured:
 				<br><b>Default value:</b> <code>false</code>
 			</td>
 		</tr>
+		<tr>
+			<td><code>highlightToday</code></td>
+			<td>Highlight events that take place today<br>
+				<br><b>Possible values:</b> <code>true</code> or <code>false</code>
+				<br><b>Default value:</b> <code>false</code>
+			</td>
+		</tr>
+		<tr>
+			<td><code>highlightTodayColor</code></td>
+			<td>The color to use when highlighting today's events<br>
+				<br><b>Possible values:</b> RGB color values [foreground, background]: <code>["#000000", "#ffffff"]</code>
+				<br><b>Default value:</b> <code>["#000000", "#ffffff"]</code> (black text on white bg)
+			</td>
+		</tr>
 	</tbody>
 </table>
 
