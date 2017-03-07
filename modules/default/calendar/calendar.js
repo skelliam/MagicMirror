@@ -27,6 +27,8 @@ Module.register("calendar", {
 		getRelative: 6,
 		fadePoint: 0.25, // Start on 1/4th of the list.
 		hidePrivate: false,
+        highlightToday: false,
+        highlightTodayColor: ["#000000", "#ffffff"], // [foreground, background]
 		calendars: [
 			{
 				symbol: "calendar",
@@ -42,6 +44,24 @@ Module.register("calendar", {
 
 	// Define required scripts.
 	getStyles: function () {
+        /* add new css style from user configuration */
+        var style = document.createElement('style');
+        var style2 = document.createElement('style');
+
+        style.type = 'text/css';
+        style.innerHTML = '.highlighttoday {'
+            + 'color: ' + this.config.highlightTodayColor[0] + ';'
+            + 'background-color: ' + this.config.highlightTodayColor[1] + ';'
+            + '}';
+
+        style2.type = 'text/css';
+        style2.innerHTML = '.soften {'
+            + 'box-shadow: 0 0 2px 2px ' + this.config.highlightTodayColor[1] + ';'
+            + '}';
+
+        document.getElementsByTagName('head')[0].appendChild(style);
+        document.getElementsByTagName('head')[0].appendChild(style2);
+
 		return ["calendar.css", "font-awesome.css"];
 	},
 
@@ -99,7 +119,6 @@ Module.register("calendar", {
 
 	// Override dom generator.
 	getDom: function () {
-
 		var events = this.createEventList();
 		var wrapper = document.createElement("table");
 		wrapper.className = "small";
@@ -143,6 +162,12 @@ Module.register("calendar", {
 
 			titleWrapper.innerHTML = this.titleTransform(event.title) + repeatingCountTitle;
 			titleWrapper.className = "title bright";
+
+            //add class to highlight today's event(s)
+            if (event.today && this.config.highlightToday) {
+                titleWrapper.className += " highlighttoday";
+            }
+
 			eventWrapper.appendChild(titleWrapper);
 
 			var timeWrapper = document.createElement("td");
@@ -217,11 +242,17 @@ Module.register("calendar", {
 					timeWrapper.innerHTML = this.capFirst(this.translate("RUNNING")) + " " + moment(event.endDate, "x").fromNow(true);
 				}
 			}
+
 			//timeWrapper.innerHTML += ' - '+ moment(event.startDate,'x').format('lll');
 			//console.log(event);
 			timeWrapper.className = "time light";
-			eventWrapper.appendChild(timeWrapper);
 
+            //add class to highlight today's event(s)
+            if (event.today && this.config.highlightToday) {
+                eventWrapper.className += " highlighttoday soften";
+            }
+
+			eventWrapper.appendChild(timeWrapper);
 			wrapper.appendChild(eventWrapper);
 
 			// Create fade effect.
