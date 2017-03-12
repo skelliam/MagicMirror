@@ -85,6 +85,10 @@ Module.register("newsfeed",{
             return wrapper.get(0);
         }
 
+        if (this.config.maxHeadlinesDisplayed <= 0) {
+            this.config.maxHeadlinesDisplayed = 1;  
+        }
+
         if (this.activeItem >= this.newsItems.length) {
             this.activeItem = 0;
         }
