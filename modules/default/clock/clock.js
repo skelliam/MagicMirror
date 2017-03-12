@@ -39,9 +39,10 @@ Module.register("clock",{
 
 		// Schedule update interval.
 		var self = this;
+
 		setInterval(function() {
 			self.updateDom();
-		}, 1000);
+		}, (self.displaySeconds ? 1000 : 60000));
 
 		// Set locale.
 		moment.locale(config.language);
