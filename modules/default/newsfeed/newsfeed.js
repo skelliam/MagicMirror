@@ -93,20 +93,22 @@ Module.register("newsfeed",{
 			if (this.config.showSourceTitle || this.config.showPublishDate) {
 				var sourceAndTimestamp = $("<div>");
 				sourceAndTimestamp.addClass("light small dimmed");
+                var titlehtml = '';
 
 				if (this.config.showSourceTitle && this.newsItems[this.activeItem].sourceTitle !== "") {
-					sourceAndTimestamp.html(this.newsItems[this.activeItem].sourceTitle);
+					titlehtml = this.newsItems[this.activeItem].sourceTitle;
 				}
 				if (this.config.showSourceTitle && this.newsItems[this.activeItem].sourceTitle !== "" && this.config.showPublishDate) {
-					sourceAndTimestamp.innerHTML += ", ";
+					titlehtml += ", ";
 				}
 				if (this.config.showPublishDate) {
-					sourceAndTimestamp.innerHTML += moment(new Date(this.newsItems[this.activeItem].pubdate)).fromNow();
+                    titlehtml += moment(new Date(this.newsItems[this.activeItem].pubdate)).fromNow();
 				}
 				if (this.config.showSourceTitle && this.newsItems[this.activeItem].sourceTitle !== "" || this.config.showPublishDate) {
-					sourceAndTimestamp.innerHTML += ":";
+                    titlehtml += ":";
 				}
 
+                sourceAndTimestamp.html(titlehtml);
 				wrapper.append(sourceAndTimestamp);
 			}
 
