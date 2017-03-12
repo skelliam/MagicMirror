@@ -109,6 +109,13 @@ The following properties can be configured:
 				<br><b>Default value:</b> <code>0</code>
 			</td>
 		</tr>
+		<tr>
+			<td><code>maxHeadlinesDisplayed</code></td>
+			<td>Number of headlines to display with each refresh.<br>
+				<br><b>Possible values:</b> <code>1</code> - <code>...</code>
+				<br><b>Default value:</b> <code>1</code>
+			</td>
+		</tr>
 			removeStartTags: false,
 		removeEndTags: false,
 		startTags: [],
