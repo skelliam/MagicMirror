@@ -97,22 +97,23 @@ Module.register("newsfeed",{
         if (this.newsItems.length > 0) {
 
             for (var i=0; i<this.config.maxHeadlinesDisplayed; i++) {
+                var idx = (this.activeItem + i);
 
                 if (this.config.showSourceTitle || this.config.showPublishDate) {
                     var sourceAndTimestamp = $("<div>");
                     sourceAndTimestamp.addClass("light small dimmed");
                     var titlehtml = '';
 
-                    if (this.config.showSourceTitle && this.newsItems[this.activeItem+i].sourceTitle !== "") {
-                        titlehtml = this.newsItems[this.activeItem+i].sourceTitle;
+                    if (this.config.showSourceTitle && this.newsItems[idx].sourceTitle !== "") {
+                        titlehtml = this.newsItems[idx].sourceTitle;
                     }
-                    if (this.config.showSourceTitle && this.newsItems[this.activeItem+i].sourceTitle !== "" && this.config.showPublishDate) {
+                    if (this.config.showSourceTitle && this.newsItems[idx].sourceTitle !== "" && this.config.showPublishDate) {
                         titlehtml += ", ";
                     }
                     if (this.config.showPublishDate) {
-                        titlehtml += moment(new Date(this.newsItems[this.activeItem+i].pubdate)).fromNow();
+                        titlehtml += moment(new Date(this.newsItems[idx].pubdate)).fromNow();
                     }
-                    if (this.config.showSourceTitle && this.newsItems[this.activeItem+i].sourceTitle !== "" || this.config.showPublishDate) {
+                    if (this.config.showSourceTitle && this.newsItems[idx].sourceTitle !== "" || this.config.showPublishDate) {
                         titlehtml += ":";
                     }
 
@@ -125,8 +126,8 @@ Module.register("newsfeed",{
                 if (this.config.removeStartTags == "title" || "both") {
 
                     for (f=0; f<this.config.startTags.length; f++) {
-                        if (this.newsItems[this.activeItem+i].title.slice(0,this.config.startTags[f].length) == this.config.startTags[f]) {
-                            this.newsItems[this.activeItem+i].title = this.newsItems[this.activeItem+i].title.slice(this.config.startTags[f].length,this.newsItems[this.activeItem+i].title.length);
+                        if (this.newsItems[idx].title.slice(0,this.config.startTags[f].length) == this.config.startTags[f]) {
+                            this.newsItems[idx].title = this.newsItems[idx].title.slice(this.config.startTags[f].length,this.newsItems[idx].title.length);
                         }
                     }
 
@@ -136,8 +137,8 @@ Module.register("newsfeed",{
 
                     if (this.config.showDescription) {
                         for (f=0; f<this.config.startTags.length;f++) {
-                            if (this.newsItems[this.activeItem+i].description.slice(0,this.config.startTags[f].length) == this.config.startTags[f]) {
-                                this.newsItems[this.activeItem+i].title = this.newsItems[this.activeItem+i].description.slice(this.config.startTags[f].length,this.newsItems[this.activeItem+i].description.length);
+                            if (this.newsItems[idx].description.slice(0,this.config.startTags[f].length) == this.config.startTags[f]) {
+                                this.newsItems[idx].title = this.newsItems[idx].description.slice(this.config.startTags[f].length,this.newsItems[idx].description.length);
                             }
                         }
                     }
@@ -148,15 +149,15 @@ Module.register("newsfeed",{
 
                 if (this.config.removeEndTags) {
                     for (f=0; f<this.config.endTags.length;f++) {
-                        if (this.newsItems[this.activeItem+i].title.slice(-this.config.endTags[f].length)==this.config.endTags[f]) {
-                            this.newsItems[this.activeItem+i].title = this.newsItems[this.activeItem+i].title.slice(0,-this.config.endTags[f].length);
+                        if (this.newsItems[idx].title.slice(-this.config.endTags[f].length)==this.config.endTags[f]) {
+                            this.newsItems[idx].title = this.newsItems[idx].title.slice(0,-this.config.endTags[f].length);
                         }
                     }
 
                     if (this.config.showDescription) {
                         for (f=0; f<this.config.endTags.length;f++) {
-                            if (this.newsItems[this.activeItem+i].description.slice(-this.config.endTags[f].length)==this.config.endTags[f]) {
-                                this.newsItems[this.activeItem+i].description = this.newsItems[this.activeItem+i].description.slice(0,-this.config.endTags[f].length);
+                            if (this.newsItems[idx].description.slice(-this.config.endTags[f].length)==this.config.endTags[f]) {
+                                this.newsItems[idx].description = this.newsItems[idx].description.slice(0,-this.config.endTags[f].length);
                             }
                         }
                     }
@@ -165,13 +166,13 @@ Module.register("newsfeed",{
 
                 var title = $("<div>");
                 title.addClass("bright medium light");
-                title.html(this.newsItems[this.activeItem+i].title);
+                title.html(this.newsItems[idx].title);
                 wrapper.append(title.clone());
 
                 if (this.config.showDescription) {
                     var description = $("<div>");
                     description.addClass("small light");
-                    description.html(this.newsItems[this.activeItem+i].description);
+                    description.html(this.newsItems[idx].description);
                     wrapper.append(description.clone());
                 }
             } /* end for loop for number of headlines */
