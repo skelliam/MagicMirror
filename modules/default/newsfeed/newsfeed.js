@@ -21,6 +21,7 @@ Module.register("newsfeed",{
 		showSourceTitle: true,
 		showPublishDate: true,
 		showDescription: false,
+        maxHeadlinesDisplayed: 1,
 		reloadInterval:  5 * 60 * 1000, // every 5 minutes
 		updateInterval: 10 * 1000,
 		animationSpeed: 2.5 * 1000,
@@ -34,7 +35,7 @@ Module.register("newsfeed",{
 
 	// Define required scripts.
 	getScripts: function() {
-		return ["moment.js"];
+		return ["moment.js", this.file('vendor/jquery.min.js')];
 	},
 
 	// Define required translations.
@@ -75,12 +76,12 @@ Module.register("newsfeed",{
 
 	// Override dom generator.
 	getDom: function() {
-		var wrapper = document.createElement("div");
+		var wrapper = $("<div>");
 
 		if (this.config.feedUrl) {
-			wrapper.className = "small bright";
-			wrapper.innerHTML = "The configuration options for the newsfeed module have changed.<br>Please check the documentation.";
-			return wrapper;
+			wrapper.addClass("small bright");
+			wrapper.html("The configuration options for the newsfeed module have changed.<br>Please check the documentation.");
+			return wrapper.get(0);
 		}
 
 		if (this.activeItem >= this.newsItems.length) {
@@ -90,11 +91,11 @@ Module.register("newsfeed",{
 		if (this.newsItems.length > 0) {
 
 			if (this.config.showSourceTitle || this.config.showPublishDate) {
-				var sourceAndTimestamp = document.createElement("div");
-				sourceAndTimestamp.className = "light small dimmed";
+				var sourceAndTimestamp = $("<div>");
+				sourceAndTimestamp.addClass("light small dimmed");
 
 				if (this.config.showSourceTitle && this.newsItems[this.activeItem].sourceTitle !== "") {
-					sourceAndTimestamp.innerHTML = this.newsItems[this.activeItem].sourceTitle;
+					sourceAndTimestamp.html(this.newsItems[this.activeItem].sourceTitle);
 				}
 				if (this.config.showSourceTitle && this.newsItems[this.activeItem].sourceTitle !== "" && this.config.showPublishDate) {
 					sourceAndTimestamp.innerHTML += ", ";
@@ -106,7 +107,7 @@ Module.register("newsfeed",{
 					sourceAndTimestamp.innerHTML += ":";
 				}
 
-				wrapper.appendChild(sourceAndTimestamp);
+				wrapper.append(sourceAndTimestamp);
 			}
 
 			//Remove selected tags from the beginning of rss feed items (title or description)
@@ -152,24 +153,24 @@ Module.register("newsfeed",{
 
 			}
 
-			var title = document.createElement("div");
-			title.className = "bright medium light";
-			title.innerHTML = this.newsItems[this.activeItem].title;
-			wrapper.appendChild(title);
+			var title = $("<div>");
+			title.addClass("bright medium light");
+			title.html(this.newsItems[this.activeItem].title);
+			wrapper.append(title);
 
 			if (this.config.showDescription) {
-				var description = document.createElement("div");
-				description.className = "small light";
-				description.innerHTML = this.newsItems[this.activeItem].description;
-				wrapper.appendChild(description);
+				var description = $("<div>");
+				description.addClass("small light");
+				description.html(this.newsItems[this.activeItem].description);
+				wrapper.append(description);
 			}
 
 		} else {
-			wrapper.innerHTML = this.translate("LOADING");
-			wrapper.className = "small dimmed";
+			wrapper.html(this.translate("LOADING"));
+			wrapper.addClass("small dimmed");
 		}
 
-		return wrapper;
+		return wrapper.get(0);
 	},
 
 	/* registerFeeds()
