@@ -42,7 +42,7 @@ Module.register("clock",{
 
 		setInterval(function() {
 			self.updateDom();
-		}, (self.displaySeconds ? 1000 : 60000));
+		}, (self.config.displaySeconds ? 1000 : 60000));
 
 		// Set locale.
 		moment.locale(config.language);
