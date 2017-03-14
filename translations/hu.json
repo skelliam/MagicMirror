@@ -1,0 +1,30 @@
+{
+	"LOADING": "Betöltés &hellip;",
+
+	"TODAY": "Ma",
+	"TOMORROW": "Holnap",
+	"DAYAFTERTOMORROW": "Holnapután",
+	"RUNNING": "Vége lesz",
+	"EMPTY": "Nincs közelgő esemény.",
+
+	"N": "É",
+	"NNE": "ÉÉK",
+	"NE": "ÉK",
+	"ENE": "KÉK",
+	"E": "K",
+	"ESE": "KDK",
+	"SE": "DK",
+	"SSE": "DDK",
+	"S": "D",
+	"SSW": "DDNy",
+	"SW": "DNy",
+	"WSW": "NyDNy",
+	"W": "Ny",
+	"WNW": "NyÉNy",
+	"NW": "ÉNy",
+	"NNW": "ÉÉNy",
+
+	"UPDATE_NOTIFICATION": "Elérhető MagicMirror² frissítés.",
+	"UPDATE_NOTIFICATION_MODULE": "Frissítés érhető el a MODULE_NAME modulhoz.",
+	"UPDATE_INFO": "A jelenlegi telepített verzió COMMIT_COUNT commit-al régebbi a BRANCH_NAME branch-en."
+}

@@ -99,7 +99,7 @@ Module.register("newsfeed",{
             for (var i=0; i<this.config.maxHeadlinesDisplayed; i++) {
                 var idx = (this.activeItem + i);
 
-                if (this.config.showSourceTitle || this.config.showPublishDate) {
+                if (!this.config.showFullArticle && (this.config.showSourceTitle || this.config.showPublishDate)) {
                     var sourceAndTimestamp = $("<div>");
                     sourceAndTimestamp.addClass("light small dimmed");
                     var titlehtml = '';
@@ -123,7 +123,7 @@ Module.register("newsfeed",{
 
                 //Remove selected tags from the beginning of rss feed items (title or description)
 
-                if (this.config.removeStartTags == "title" || "both") {
+			if (this.config.removeStartTags == "title" || this.config.removeStartTags == "both") {
 
                     for (f=0; f<this.config.startTags.length; f++) {
                         if (this.newsItems[idx].title.slice(0,this.config.startTags[f].length) == this.config.startTags[f]) {
@@ -133,7 +133,7 @@ Module.register("newsfeed",{
 
                 }
 
-                if (this.config.removeStartTags == "description" || "both") {
+			if (this.config.removeStartTags == "description" || this.config.removeStartTags == "both") {
 
                     if (this.config.showDescription) {
                         for (f=0; f<this.config.startTags.length;f++) {
@@ -164,10 +164,12 @@ Module.register("newsfeed",{
 
                 }
 
-                var title = $("<div>");
-                title.addClass("bright medium light");
-                title.html(this.newsItems[idx].title);
-                wrapper.append(title.clone());
+		if(!this.config.showFullArticle){
+                    var title = $("<div>");
+                    title.addClass("bright medium light");
+                    title.html(this.newsItems[idx].title);
+                    wrapper.append(title.clone());
+                }
 
                 if (this.config.showDescription) {
                     var description = $("<div>");
@@ -175,6 +177,21 @@ Module.register("newsfeed",{
                     description.html(this.newsItems[idx].description);
                     wrapper.append(description.clone());
                 }
+
+
+		if (this.config.showFullArticle) {
+		    var fullArticle = $("<iframe>");
+		    //fullArticle.className = "";
+		    fullArticle.style.width = "100%";
+		    fullArticle.style.top = "0";
+		    fullArticle.style.left = "0";
+		    fullArticle.style.position = "fixed";
+		    fullArticle.height = window.innerHeight;
+		    fullArticle.style.border = "none";
+		    fullArticle.src = this.newsItems[idx].url;
+		    wrapper.append(fullArticle);
+		}
+
             } /* end for loop for number of headlines */
 
         } else {
@@ -286,5 +303,50 @@ Module.register("newsfeed",{
         return string.charAt(0).toUpperCase() + string.slice(1);
     },
 
+	resetDescrOrFullArticleAndTimer: function() {
+		this.config.showDescription = false;
+		this.config.showFullArticle = false;
+		if (!timer) {
+			this.scheduleUpdateInterval();
+		}
+	},
+
+	notificationReceived: function(notification, payload, sender) {
+		Log.info(this.name + " - received notification: " + notification);
+		if(notification == "ARTICLE_NEXT"){
+			var before = this.activeItem;
+			this.activeItem++;
+			if (this.activeItem >= this.newsItems.length) {
+				this.activeItem = 0;
+			}
+			this.resetDescrOrFullArticleAndTimer();
+			Log.info(this.name + " - going from article #" + before + " to #" + this.activeItem + " (of " + this.newsItems.length + ")");
+			this.updateDom(100);
+		} else if(notification == "ARTICLE_PREVIOUS"){
+			var before = this.activeItem;
+			this.activeItem--;
+			if (this.activeItem < 0) {
+				this.activeItem = this.newsItems.length - 1;
+			}
+			this.resetDescrOrFullArticleAndTimer();
+			Log.info(this.name + " - going from article #" + before + " to #" + this.activeItem + " (of " + this.newsItems.length + ")");
+			this.updateDom(100);
+		}
+		// if "more details" is received the first time: show article summary, on second time show full article
+		else if(notification == "ARTICLE_MORE_DETAILS"){
+			this.config.showDescription = !this.config.showDescription;
+			this.config.showFullArticle = !this.config.showDescription;
+			clearInterval(timer);
+			timer = null;
+			Log.info(this.name + " - showing " + this.config.showDescription ? "article description" : "full article");
+			this.updateDom(100);
+		} else if(notification == "ARTICLE_LESS_DETAILS"){
+			this.resetDescrOrFullArticleAndTimer();
+			Log.info(this.name + " - showing only article titles again");
+			this.updateDom(100);
+		} else {
+			Log.info(this.name + " - unknown notification, ignoring: " + notification);
+		}
+	},
 
 });
