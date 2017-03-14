@@ -176,7 +176,8 @@ Module.register("calendar", {
 			titleWrapper.innerHTML = this.titleTransform(event.title) + repeatingCountTitle;
 
 			if (!this.config.colored) {
-			titleWrapper.className = "title bright";
+			    titleWrapper.className = "title bright";
+            }
 
             //add class to highlight today's event(s)
             if (event.today && this.config.highlightToday) {
