@@ -99,6 +99,10 @@ Module.register("newsfeed",{
             for (var i=0; i<this.config.maxHeadlinesDisplayed; i++) {
                 var idx = (this.activeItem + i);
 
+                if (idx >= this.newsItems.length) {
+                    break;
+                }
+
                 if (!this.config.showFullArticle && (this.config.showSourceTitle || this.config.showPublishDate)) {
                     var sourceAndTimestamp = $("<div>");
                     sourceAndTimestamp.addClass("light small dimmed");
@@ -192,7 +196,7 @@ Module.register("newsfeed",{
 		    wrapper.append(fullArticle);
 		}
 
-            } /* end for loop for number of headlines */
+        } /* end for loop for number of headlines */
 
         } else {
             wrapper.html(this.translate("LOADING"));
@@ -289,7 +293,7 @@ Module.register("newsfeed",{
         setInterval(function() {
             self.activeItem += self.config.maxHeadlinesDisplayed;
             self.updateDom(self.config.animationSpeed);
-        }, this.config.updateInterval);
+        }, self.config.updateInterval);
     },
 
         /* capitalizeFirstLetter(string)
